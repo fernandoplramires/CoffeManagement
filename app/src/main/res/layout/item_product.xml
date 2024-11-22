@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <!-- Linha do Produto -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="4dp">
+
+            <!-- Contêiner dos Botões -->
+            <LinearLayout
+                android:id="@+id/buttonContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="8dp"
+                android:padding="4dp">
+
+                <Button
+                    android:id="@+id/buttonEdit"
+                    android:layout_width="70dp"
+                    android:layout_height="25dp"
+                    android:text="Editar"
+                    android:textSize="10sp"
+                    android:background="@drawable/button_primary"
+                    android:layout_marginBottom="4dp" />
+
+                <Button
+                    android:id="@+id/buttonRemove"
+                    android:layout_width="70dp"
+                    android:layout_height="25dp"
+                    android:text="Remover"
+                    android:textSize="10sp"
+                    android:background="@drawable/button_primary"
+                    android:layout_marginBottom="4dp" />
+
+                <Button
+                    android:id="@+id/buttonSave"
+                    android:layout_width="70dp"
+                    android:layout_height="25dp"
+                    android:text="Salvar"
+                    android:textSize="10sp"
+                    android:background="@drawable/button_primary"
+                    android:layout_marginBottom="4dp"
+                    android:enabled="false" />
+            </LinearLayout>
+
+            <!-- Contêiner do Produto -->
+            <LinearLayout
+                android:id="@+id/productContainer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:background="@drawable/item_shadow_border">
+
+                <!-- Imagem e Preço -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="12dp">
+
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="60dp">
+
+                        <ImageView
+                            android:id="@+id/imageViewProduct"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/image_border"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_placeholder" />
+
+                        <ImageButton
+                            android:id="@+id/buttonUploadImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/ic_upload"
+                            android:scaleType="center"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/textViewPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="R$ 0.00"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/holo_green_dark"
+                        android:gravity="center_horizontal" />
+
+                    <EditText
+                        android:id="@+id/editTextPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Preço"
+                        android:visibility="gone"
+                        android:textSize="12sp"
+                        android:inputType="numberDecimal"
+                        android:textColor="@android:color/holo_green_dark"
+                        android:gravity="center_horizontal" />
+                </LinearLayout>
+
+                <!-- Detalhes do Produto -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="top">
+
+                    <TextView
+                        android:id="@+id/textViewName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nome do Produto"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#ADD8E6"
+                        android:layout_marginBottom="2dp" />
+
+                    <TextView
+                        android:id="@+id/textViewDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Descrição detalhada do produto."
+                        android:textSize="12sp"
+                        android:textColor="@android:color/black" />
+
+                    <EditText
+                        android:id="@+id/editTextName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nome"
+                        android:visibility="gone"
+                        android:textSize="14sp"
+                        android:textColor="@android:color/black" />
+
+                    <EditText
+                        android:id="@+id/editTextDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Descrição"
+                        android:visibility="gone"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/black" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>
