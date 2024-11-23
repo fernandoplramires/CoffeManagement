@@ -8,7 +8,7 @@
     <!-- Fundo Azul Claro -->
     <item>
         <shape>
-            <solid android:color="#ADD8E6" /> <!-- Azul claro -->
+            <solid android:color="@color/light_blue" /> <!-- Azul claro -->
             <stroke
                 android:width="5dp"
                 android:color="#000000" /> <!-- Borda preta mais espessa -->
