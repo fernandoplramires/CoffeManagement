@@ -4,7 +4,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import br.com.ramires.gourment.coffemanagement.data.repository.*
+import br.com.ramires.gourment.coffemanagement.data.repository.order.FirebaseOrderRepository
+import br.com.ramires.gourment.coffemanagement.data.repository.order.MockOrderRepository
+import br.com.ramires.gourment.coffemanagement.data.repository.order.OrderRepositoryInterface
+import br.com.ramires.gourment.coffemanagement.data.repository.product.EmptyProductRepository
+import br.com.ramires.gourment.coffemanagement.data.repository.product.FirebaseProductRepository
+import br.com.ramires.gourment.coffemanagement.data.repository.product.MockProductRepository
+import br.com.ramires.gourment.coffemanagement.data.repository.product.ProductRepositoryInterface
 import br.com.ramires.gourment.coffemanagement.databinding.ActivityMainBinding
 import br.com.ramires.gourment.coffemanagement.ui.order.OrdersFragment
 import br.com.ramires.gourment.coffemanagement.ui.product.ProductsFragment
@@ -26,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setupTabLayoutStyle()
         setupTabListener()
 
-        replaceFragment(ProductsFragment())
+        replaceFragment(ProductsFragment(EmptyProductRepository()))
     }
 
     private fun setupTabLayoutStyle() {
@@ -38,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun promptUserForRepository() {
-        val options = arrayOf("Mock Repository", "Real Repository")
+        val options = arrayOf("Mock Repository", "Firebase Repository")
         AlertDialog.Builder(this)
             .setTitle("Escolha o Tipo de Repositório")
             .setSingleChoiceItems(options, -1) { dialog, which ->
@@ -47,8 +53,8 @@ class MainActivity : AppCompatActivity() {
                     productRepository = MockProductRepository()
                     orderRepository = MockOrderRepository()
                 } else {
-                    productRepository = ProductRepository()
-                    orderRepository = OrderRepository()
+                    productRepository = FirebaseProductRepository()
+                    orderRepository = FirebaseOrderRepository()
                 }
                 dialog.dismiss()
             }
@@ -61,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.view?.setBackgroundResource(R.drawable.tab_selected_background)
                 when (tab?.position) {
-                    0 -> replaceFragment(ProductsFragment())
+                    0 -> replaceFragment(ProductsFragment(productRepository!!))
                     1 -> replaceFragment(OrdersFragment(orderRepository!!))
                 }
             }

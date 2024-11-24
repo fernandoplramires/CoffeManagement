@@ -1,6 +1,5 @@
 package br.com.ramires.gourment.coffemanagement.ui.product
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

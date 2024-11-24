@@ -42,12 +42,12 @@ class OrderAdapter(
             )
 
             // Titulo do pedido
-            textViewOrderTitle.text = "${order.status.name} Pedido #${order.id}"
+            textViewOrderTitle.text = "${order.status} Pedido #${order.id}"
 
             // Formatação dos detalhes do pedido como lista unificada
-            textViewOrderDetails.text = order.details.joinToString(separator = "\n") {
+            textViewOrderDetails.text = order.details?.joinToString(separator = "\n") {
                 "${it.quantity}x - ${it.productName}"
-            }
+            } ?: "Nenhum detalhe de pedido"
 
             // Valor total
             textViewTotalPrice.text = "Valor Total: R$ ${order.totalPrice ?: 0}"
@@ -67,7 +67,8 @@ class OrderAdapter(
             )
             statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerOrderStatus.adapter = statusAdapter
-            spinnerOrderStatus.setSelection(order.status.ordinal)
+            val statusIndex = OrderStatus.values().indexOf(order.status ?: OrderStatus.NOVO)
+            spinnerOrderStatus.setSelection(statusIndex)
             spinnerOrderStatus.isEnabled = false
 
             // Configuração inicial dos botões
@@ -86,9 +87,7 @@ class OrderAdapter(
                     zipCode = textViewZipCode.text.toString(),
                     complement = textViewComplement.text.toString(),
                     number = textViewNumber.text.toString(),
-                    status = OrderStatus.valueOf(
-                        spinnerOrderStatus.selectedItem.toString()
-                    )
+                    status = spinnerOrderStatus.selectedItem.toString()
                 )
                 onOrderSave(updatedOrder)
                 resetEditingState(this, holder.itemView.context)
@@ -99,7 +98,8 @@ class OrderAdapter(
             textViewOrderTitle.setOnClickListener {
                 expandedOrderId = if (isExpanded) null else order.id
                 notifyDataSetChanged()
-                onOrderClick(order.id)
+                //WARNING
+                onOrderClick(order.id!!)
             }
         }
     }

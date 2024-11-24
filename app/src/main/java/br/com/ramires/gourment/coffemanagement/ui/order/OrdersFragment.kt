@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import br.com.ramires.gourment.coffemanagement.data.repository.OrderRepositoryInterface
+import br.com.ramires.gourment.coffemanagement.data.repository.order.OrderRepositoryInterface
 import br.com.ramires.gourment.coffemanagement.databinding.FragmentOrdersBinding
 
 class OrdersFragment(private val repository: OrderRepositoryInterface) : Fragment() {
@@ -53,7 +53,6 @@ class OrdersFragment(private val repository: OrderRepositoryInterface) : Fragmen
 
     private fun observeViewModel() {
         viewModel.orders.observe(viewLifecycleOwner) { orders ->
-            println("Orders observed in Fragment: $orders") // Log para verificar os dados observados
             adapter.submitList(orders)
             adapter.notifyDataSetChanged() // Força a atualização do RecyclerView
         }

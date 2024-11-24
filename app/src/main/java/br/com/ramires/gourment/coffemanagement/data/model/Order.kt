@@ -1,5 +1,7 @@
 package br.com.ramires.gourment.coffemanagement.data.model
 
+import com.google.firebase.firestore.PropertyName
+
 enum class OrderStatus(val displayName: String) {
     NOVO("Novo"),
     CANCELADO("Cancelado"),
@@ -8,18 +10,23 @@ enum class OrderStatus(val displayName: String) {
 }
 
 data class OrderDetail(
-    val productName: String,
-    val quantity: Int
-)
+    @PropertyName("productName") var productName: String? = null,
+    @PropertyName("quantity") var quantity: Int? = null
+) {
+    constructor() : this(null, null)
+}
 
 data class Order(
-    val id: Int,
-    val details: List<OrderDetail>,
-    val totalPrice: Double,
-    val email: String?,
-    val phone: String?,
-    val zipCode: String?,
-    val complement: String?,
-    val number: String?,
-    val status: OrderStatus
-)
+    @PropertyName("id") var id: Int? = null,
+    @PropertyName("details") var details: List<OrderDetail>? = null,
+    @PropertyName("totalPrice") var totalPrice: Double? = null,
+    @PropertyName("email") var email: String? = null,
+    @PropertyName("phone") var phone: String? = null,
+    @PropertyName("zipCode") var zipCode: String? = null,
+    @PropertyName("complement") var complement: String? = null,
+    @PropertyName("number") var number: String? = null,
+    @PropertyName("status") var status: String? = null
+) {
+    // Construtor vazio para o Firestore
+    constructor() : this(null, null, null, null, null, null, null, null, null)
+}

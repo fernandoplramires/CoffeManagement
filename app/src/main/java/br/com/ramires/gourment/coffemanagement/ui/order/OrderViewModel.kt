@@ -1,10 +1,13 @@
 package br.com.ramires.gourment.coffemanagement.ui.order
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import br.com.ramires.gourment.coffemanagement.data.model.Order
-import br.com.ramires.gourment.coffemanagement.data.repository.OrderRepositoryInterface
+import br.com.ramires.gourment.coffemanagement.data.repository.order.OrderRepositoryInterface
+import kotlinx.coroutines.launch
 
 class OrderViewModel(private val repository: OrderRepositoryInterface) : ViewModel() {
 
@@ -15,14 +18,30 @@ class OrderViewModel(private val repository: OrderRepositoryInterface) : ViewMod
         loadOrders()
     }
 
-    fun loadOrders() {
-        val data = repository.getOrders()
-        _orders.value = data
+    private fun loadOrders() {
+        viewModelScope.launch {
+            try {
+                val orderList = repository.getAllOrders()
+                //Log.d("FirebaseTest", "Load orders: ${orderList.toString()}")
+                _orders.postValue(orderList)
+            } catch (e: Exception) {
+                // Trate exceções, se necessário
+                e.printStackTrace()
+            }
+        }
     }
 
     fun updateOrder(updatedOrder: Order) {
-        repository.updateOrder(updatedOrder)
-        loadOrders()
+        viewModelScope.launch {
+            try {
+                //Log.d("FirebaseTest", "Updating order: ${updatedOrder.toString()}")
+                repository.updateOrder(updatedOrder)
+                loadOrders()
+            } catch (e: Exception) {
+                // Trate exceções, se necessário
+                e.printStackTrace()
+            }
+        }
     }
 
     fun expandOrder(orderId: Int) {

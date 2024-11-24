@@ -9,9 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.ramires.gourment.coffemanagement.data.model.Product
+import br.com.ramires.gourment.coffemanagement.data.repository.product.ProductRepositoryInterface
 import br.com.ramires.gourment.coffemanagement.databinding.FragmentProductsBinding
+import br.com.ramires.gourment.coffemanagement.ui.order.OrderViewModel
+import br.com.ramires.gourment.coffemanagement.ui.order.OrderViewModelFactory
 
-class ProductsFragment : Fragment() {
+class ProductsFragment(private val repository: ProductRepositoryInterface) : Fragment() {
+
     private var _binding: FragmentProductsBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: ProductViewModel
@@ -28,7 +32,8 @@ class ProductsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        val factory = ProductViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory).get(ProductViewModel::class.java)
 
         setupRecyclerView()
         observeViewModel()
@@ -37,7 +42,7 @@ class ProductsFragment : Fragment() {
         binding.buttonAddProduct.setOnClickListener {
             val dialog = NewProductDialogFragment { value, title, description, imageUrl ->
                 val newProduct = Product(
-                    id = System.currentTimeMillis().toString(),
+                    id = 0,
                     name = title,
                     description = description,
                     price = value.toDoubleOrNull() ?: 0.0,
@@ -58,7 +63,6 @@ class ProductsFragment : Fragment() {
             onRemoveClick = { product ->
                 // Remove o produto
                 showRemoveConfirmationDialog(product)
-                //viewModel.removeProduct(product)
             },
             onSaveClick = { updatedProduct ->
                 // Salva o produto editado
@@ -72,7 +76,7 @@ class ProductsFragment : Fragment() {
     private fun showRemoveConfirmationDialog(product: Product) {
         val dialog = RemoveConfirmationDialogFragment { confirmed ->
             if (confirmed) {
-                viewModel.removeProduct(product)
+                viewModel.removeProduct(product.id!!)
                 Toast.makeText(requireContext(), "Produto removido com sucesso!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(requireContext(), "Exclusão cancelada", Toast.LENGTH_SHORT).show()

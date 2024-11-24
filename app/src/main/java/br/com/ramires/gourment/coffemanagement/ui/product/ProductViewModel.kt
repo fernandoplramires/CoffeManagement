@@ -3,20 +3,19 @@ package br.com.ramires.gourment.coffemanagement.ui.product
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import br.com.ramires.gourment.coffemanagement.data.model.Product
-import br.com.ramires.gourment.coffemanagement.data.repository.MockProductRepository
-import br.com.ramires.gourment.coffemanagement.data.repository.ProductRepository
-import br.com.ramires.gourment.coffemanagement.data.repository.ProductRepositoryInterface
+import br.com.ramires.gourment.coffemanagement.data.repository.product.ProductRepositoryInterface
+import kotlinx.coroutines.launch
 
-class ProductViewModel : ViewModel() {
-
-    private val repository: ProductRepositoryInterface =
-        if (USE_MOCKS) MockProductRepository() else ProductRepository()
+class ProductViewModel(private val repository: ProductRepositoryInterface) : ViewModel() {
 
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> get() = _products
+
     private val _editingProduct = MutableLiveData<Product?>()
     val editingProduct: LiveData<Product?> get() = _editingProduct
+
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
@@ -25,41 +24,54 @@ class ProductViewModel : ViewModel() {
     }
 
     private fun loadProducts() {
-        _products.value = repository.getProducts()
+        viewModelScope.launch {
+            try {
+                val orderList = repository.getAllProducts()
+                _products.postValue(orderList)
+            } catch (e: Exception) {
+                // Trate exceções, se necessário
+                e.printStackTrace()
+            }
+        }
     }
 
     fun addProduct(product: Product) {
-        repository.addProduct(product)
-        loadProducts()
+        viewModelScope.launch {
+            try {
+                repository.addProduct(product)
+                loadProducts()
+            } catch (e: Exception) {
+                // Trate exceções, se necessário
+                e.printStackTrace()
+            }
+        }
     }
 
-    fun removeProduct(product: Product) {
-        repository.removeProduct(product)
-        _products.value = repository.getProducts().toList() // Garante nova referência
+    fun removeProduct(productId: Int) {
+        viewModelScope.launch {
+            try {
+                repository.deleteProduct(productId)
+                _products.value = repository.getAllProducts().toList() // Garante nova referência
+            } catch (e: Exception) {
+                // Trate exceções, se necessário
+                e.printStackTrace()
+            }
+        }
     }
 
     fun startEditingProduct(product: Product) {
         _editingProduct.value = product
     }
 
-    fun saveEditedProduct(updatedProduct: Product) {
-        repository.updateProduct(updatedProduct)
-        _products.value = repository.getProducts() // Atualiza o LiveData após salvar
-
-    }
-
-    fun updateProduct(updatedProduct: Product) {
-        // Atualiza o repositório (mock ou real)
-        repository.updateProduct(updatedProduct)
-
-        // Atualiza a lista no LiveData
-        val updatedList = products.value?.map { product ->
-            if (product.id == updatedProduct.id) updatedProduct else product
+    fun saveEditedProduct(product: Product) {
+        viewModelScope.launch {
+            try {
+                repository.updateProduct(product)
+                _products.value = repository.getAllProducts() // Atualiza o LiveData após salvar
+            } catch (e: Exception) {
+                // Trate exceções, se necessário
+                e.printStackTrace()
+            }
         }
-        _products.value = updatedList
-    }
-
-    companion object {
-        private const val USE_MOCKS = true // Alterne para false para usar o repositório real
     }
 }
