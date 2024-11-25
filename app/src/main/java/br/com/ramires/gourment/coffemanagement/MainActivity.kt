@@ -27,12 +27,23 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        promptUserForRepository()
+        val repositoryType = intent.getStringExtra("REPOSITORY_TYPE")
+        initializeRepositories(repositoryType)
 
         setupTabLayoutStyle()
         setupTabListener()
 
-        replaceFragment(ProductsFragment(EmptyProductRepository()))
+        replaceFragment(ProductsFragment(productRepository!!))
+    }
+
+    private fun initializeRepositories(repositoryType: String?) {
+        if (repositoryType == "MOCK") {
+            productRepository = MockProductRepository()
+            orderRepository = MockOrderRepository()
+        } else {
+            productRepository = FirebaseProductRepository()
+            orderRepository = FirebaseOrderRepository()
+        }
     }
 
     private fun setupTabLayoutStyle() {
@@ -41,25 +52,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.tabLayout.getTabAt(0)?.view?.setBackgroundResource(R.drawable.tab_selected_background)
         binding.tabLayout.getTabAt(1)?.view?.setBackgroundResource(R.drawable.tab_default_background)
-    }
-
-    private fun promptUserForRepository() {
-        val options = arrayOf("Mock Repository", "Firebase Repository")
-        AlertDialog.Builder(this)
-            .setTitle("Escolha o Tipo de Repositório")
-            .setSingleChoiceItems(options, -1) { dialog, which ->
-                // Escolha do repositório
-                if (which == 0) {
-                    productRepository = MockProductRepository()
-                    orderRepository = MockOrderRepository()
-                } else {
-                    productRepository = FirebaseProductRepository()
-                    orderRepository = FirebaseOrderRepository()
-                }
-                dialog.dismiss()
-            }
-            .setCancelable(false)
-            .show()
     }
 
     private fun setupTabListener() {
