@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
                 selectedRepositoryType = if (which == 0) "MOCK" else "REAL"
                 dialog.dismiss()
 
-                validateDevice(this)
+                validateDevice(context)
             }
             .setCancelable(false)
             .show()

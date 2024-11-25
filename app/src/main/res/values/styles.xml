@@ -2,9 +2,9 @@
     <!-- Tema Principal -->
     <style name="Theme.CoffeeManagement" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Personalize cores e estilos -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryDark">@color/purple_700</item>
-        <item name="colorAccent">@color/teal_200</item>
+        <item name="colorPrimary">@color/gray</item>
+        <item name="colorPrimaryDark">@color/dark_gray</item>
+        <item name="colorAccent">@color/light_gray</item>
     </style>
     <!-- Estilo Customizado para o Diálogo -->
     <style name="CustomDialog" parent="Theme.AppCompat.Dialog">

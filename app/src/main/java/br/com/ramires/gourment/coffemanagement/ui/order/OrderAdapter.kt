@@ -5,6 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +16,9 @@ import br.com.ramires.gourment.coffemanagement.R
 import br.com.ramires.gourment.coffemanagement.data.model.Order
 import br.com.ramires.gourment.coffemanagement.data.model.OrderStatus
 import br.com.ramires.gourment.coffemanagement.databinding.ItemOrderBinding
+import br.com.ramires.gourment.coffemanagement.util.Convertions
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class OrderAdapter(
     private val onOrderClick: (Int) -> Unit,
@@ -44,13 +51,60 @@ class OrderAdapter(
             // Titulo do pedido
             textViewOrderTitle.text = "${order.status} Pedido #${order.id}"
 
-            // Formatação dos detalhes do pedido como lista unificada
-            textViewOrderDetails.text = order.details?.joinToString(separator = "\n") {
-                "${it.quantity}x - ${it.productName}"
-            } ?: "Nenhum detalhe de pedido"
+            // Preencher os itens do pedido dinamicamente
+            layoutOrderItems.removeAllViews() // Limpar itens antigos
+            order.details?.forEachIndexed  { index, detail ->
+                val itemLayout = LayoutInflater.from(root.context)
+                    .inflate(R.layout.item_order_detail, layoutOrderItems, false)
+
+                val linearLayoutItemOrderDetail = itemLayout.findViewById<LinearLayout>(R.id.linearLayoutItemOrderDetail)
+                val textViewItemName = itemLayout.findViewById<TextView>(R.id.textViewItemName)
+                val textViewItemQuantity = itemLayout.findViewById<TextView>(R.id.textViewItemQuantity)
+                val buttonIncrease = itemLayout.findViewById<Button>(R.id.buttonIncreaseQuantity)
+                val buttonDecrease = itemLayout.findViewById<Button>(R.id.buttonDecreaseQuantity)
+                val buttonRemove = itemLayout.findViewById<Button>(R.id.buttonRemoveItem)
+
+                // Define uma cor alternada com base na posição
+                val backgroundColor = if (index  % 2 == 0) {
+                    ContextCompat.getColor(holder.itemView.context, R.color.color_odd)
+                } else {
+                    ContextCompat.getColor(holder.itemView.context, R.color.color_even)
+                }
+
+                // Aplica a cor de fundo no layout principal do item
+                linearLayoutItemOrderDetail.setBackgroundColor(backgroundColor)
+
+                // Configurar nome e quantidade
+                textViewItemName.text = detail.productName
+                textViewItemQuantity.text = detail.quantity.toString().plus("x -")
+
+                // Configurar ações dos botões
+                buttonIncrease.setOnClickListener {
+                    // Lógica para aumentar quantidade
+                    detail.quantity = detail.quantity?.plus(1)
+                    textViewItemQuantity.text = detail.quantity.toString().plus("x -")
+                }
+
+                buttonDecrease.setOnClickListener {
+                    // Lógica para diminuir quantidade
+                    if (detail.quantity!! > 1) {
+                        detail.quantity = detail.quantity!! - 1
+                        textViewItemQuantity.text = detail.quantity.toString().plus("x -")
+                    }
+                }
+
+                buttonRemove.setOnClickListener {
+                    // Lógica para remover item
+                    order.details = order.details?.filter { it != detail }
+                    notifyDataSetChanged()
+                }
+
+                layoutOrderItems.addView(itemLayout)
+            }
 
             // Valor total
-            textViewTotalPrice.text = "Valor Total: R$ ${order.totalPrice ?: 0}"
+            val precoFormatado = Convertions.formatToBrazilianCurrency(order.totalPrice?.toDouble() ?: 0.0)
+            textViewTotalPrice.text = "Valor Total: ${precoFormatado}"
 
             // Informações do cliente
             textViewEmail.text = order.email ?: "Não informado"
@@ -122,7 +176,6 @@ class OrderAdapter(
 
         binding.buttonSaveOrder.isEnabled = true
         binding.buttonSaveOrder.setTextColor(ContextCompat.getColor(context, R.color.black))
-
         binding.buttonEditOrder.isEnabled = false
         binding.buttonEditOrder.setTextColor(ContextCompat.getColor(context, R.color.light_gray))
     }

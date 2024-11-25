@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp"
+        android:padding="2dp"
         android:background="@drawable/item_order_background">
 
         <!-- Título do Pedido -->
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone"
-            android:padding="8dp">
+            android:padding="2dp">
 
             <!-- Detalhes do Pedido -->
             <LinearLayout
@@ -41,15 +41,15 @@
                 android:orientation="vertical"
                 android:background="@drawable/item_order_section_background">
 
-                <TextView
-                    android:id="@+id/textViewOrderDetails"
+                <!-- Detalhes do Pedido (Dinâmico) -->
+                <LinearLayout
+                    android:id="@+id/layoutOrderItems"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Detalhes do pedido"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/black"
-                    android:padding="8dp"
-                    android:background="@drawable/item_order_details_background" />
+                    android:orientation="vertical"
+                    android:background="@drawable/item_order_section_background"
+                    android:padding="8dp">
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Valor Total -->
@@ -181,6 +181,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:background="@drawable/item_order_section_background"
+                android:padding="8dp"
                 android:paddingTop="8dp">
 
                 <!-- Botão Editar e Menu Status -->
@@ -188,42 +190,39 @@
                     android:id="@+id/buttonEditOrder"
                     android:layout_width="70dp"
                     android:layout_height="25dp"
+                    android:layout_gravity="left"
                     android:background="@drawable/item_order_button_background"
                     android:text="Editar"
                     android:textColor="@color/black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <!-- Menu Status -->
                 <Spinner
                     android:id="@+id/spinnerOrderStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:layout_weight="2"
                     android:layout_marginHorizontal="16dp"
+                    android:layout_gravity="center"
                     android:entries="@array/order_status_options"
                     android:enabled="false"
                     android:textColor="@color/black"
-                    android:textSize="10sp"
-                    android:scrollbarSize="@dimen/cardview_compat_inset_shadow"
-                    android:textAppearance="?attr/textInputOutlinedExposedDropdownMenuStyle" />
-            </LinearLayout>
-
-            <!-- Botões Salvar -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingTop="8dp">
+                    android:textSize="12sp"
+                    android:scrollbarSize="16dp"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <Button
                     android:id="@+id/buttonSaveOrder"
                     android:layout_width="70dp"
                     android:layout_height="25dp"
+                    android:layout_gravity="right"
                     android:background="@drawable/item_order_button_background"
                     android:text="Salvar"
                     android:enabled="false"
                     android:textColor="@color/black"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -17,7 +17,7 @@
             app:tabIndicatorHeight="0dp"
             app:tabTextColor="@color/black"
             app:tabSelectedTextColor="@color/black"
-            app:tabIndicatorColor="@color/purple_500"
+            app:tabIndicatorColor="@color/light_gray"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

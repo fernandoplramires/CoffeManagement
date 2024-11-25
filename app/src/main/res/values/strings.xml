@@ -6,6 +6,9 @@
     <string name="cancel">Cancelar</string>
     <string name="confirm">Confirmar</string>
     <string name="total_amount">Total: R$ %.2f</string>
+    <string name="increase_quantity">Aumenta a quantidade do item</string>
+    <string name="decrease_quantity">Diminui a quantidade do item</string>
+    <string name="remove_item">Remove o item</string>
     <!-- Outras strings -->
     <string-array name="order_status_options">
         <item>NOVO</item>
