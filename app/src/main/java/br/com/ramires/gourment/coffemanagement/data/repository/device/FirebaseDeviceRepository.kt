@@ -20,12 +20,33 @@ class FirebaseDeviceRepository : DeviceRepositoryInterface {
             }
     }
 
-    override suspend fun isDeviceRegistered(imei: String): Boolean {
+    override suspend fun isDeviceRegistered(deviceId: String): Boolean {
         return try {
-            val querySnapshot = devicesCollection.whereEqualTo("imei", imei).get().await()
+            val querySnapshot = devicesCollection
+                .whereEqualTo("deviceId", deviceId)
+                .whereEqualTo("status", true)
+                .get()
+                .await()
+
             !querySnapshot.isEmpty
         } catch (e: Exception) {
             Log.e("FirebaseOrderRepository", "Error fetching devices", e)
+            false
+        }
+    }
+
+    override suspend fun isUserValid(username: String, password: String): Boolean {
+        return try {
+            val userSnapshot = devicesCollection
+                .whereEqualTo("username", username)
+                .whereEqualTo("password", password)
+                .whereEqualTo("status", true)
+                .get()
+                .await()
+
+            !userSnapshot.isEmpty
+        } catch (e: Exception) {
+            Log.e("FirebaseDeviceRepository", "Erro to validade username/password", e)
             false
         }
     }

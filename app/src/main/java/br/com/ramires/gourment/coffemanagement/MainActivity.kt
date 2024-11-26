@@ -1,13 +1,13 @@
 package br.com.ramires.gourment.coffemanagement
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import br.com.ramires.gourment.coffemanagement.data.repository.order.FirebaseOrderRepository
 import br.com.ramires.gourment.coffemanagement.data.repository.order.MockOrderRepository
 import br.com.ramires.gourment.coffemanagement.data.repository.order.OrderRepositoryInterface
-import br.com.ramires.gourment.coffemanagement.data.repository.product.EmptyProductRepository
 import br.com.ramires.gourment.coffemanagement.data.repository.product.FirebaseProductRepository
 import br.com.ramires.gourment.coffemanagement.data.repository.product.MockProductRepository
 import br.com.ramires.gourment.coffemanagement.data.repository.product.ProductRepositoryInterface
@@ -17,18 +17,32 @@ import br.com.ramires.gourment.coffemanagement.ui.product.ProductsFragment
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     private var productRepository: ProductRepositoryInterface? = null
     private var orderRepository: OrderRepositoryInterface? = null
-    private lateinit var binding: ActivityMainBinding
+
+    companion object {
+        fun start(
+            context: Context,
+            repositoryType: String
+        ) {
+            val intent = Intent(context, MainActivity::class.java).apply {
+                putExtra("REPOSITORY_TYPE", repositoryType)
+            }
+            context.startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
         val repositoryType = intent.getStringExtra("REPOSITORY_TYPE")
         initializeRepositories(repositoryType)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupTabLayoutStyle()
         setupTabListener()

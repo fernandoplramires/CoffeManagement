@@ -8,17 +8,26 @@ class MockDeviceRepository : DeviceRepositoryInterface {
         Device(
             1,
             "000000000000000",
+            "joselito",
+            "1234",
             true
         ),
         Device(
             2,
-            "",
+            "000000000000001",
+            "hermes",
+            "1234",
             false
         )
     )
 
-    override suspend fun isDeviceRegistered(imei: String): Boolean {
-        val device = devices.find { it.imei == imei }
+    override suspend fun isDeviceRegistered(deviceId: String): Boolean {
+        val device = devices.find { it.deviceId == deviceId && it.status == true }
+        return device?.status ?: false
+    }
+
+    override suspend fun isUserValid(username: String, password: String): Boolean {
+        val device = devices.find { it.username == username && it.password == password && it.status == true }
         return device?.status ?: false
     }
 
