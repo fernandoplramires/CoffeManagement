@@ -17,10 +17,8 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-
     private var deviceRepository: DeviceRepositoryInterface? = null
     private lateinit var repositoryType: String
-
     private lateinit var deviceViewModel: DeviceViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

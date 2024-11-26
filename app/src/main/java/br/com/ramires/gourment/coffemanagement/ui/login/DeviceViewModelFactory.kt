@@ -7,6 +7,7 @@ import br.com.ramires.gourment.coffemanagement.data.repository.device.DeviceRepo
 class DeviceViewModelFactory(
     private val repository: DeviceRepositoryInterface
 ) : ViewModelProvider.Factory {
+
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DeviceViewModel::class.java)) {

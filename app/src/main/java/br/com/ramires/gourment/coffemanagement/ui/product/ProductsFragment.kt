@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.ramires.gourment.coffemanagement.data.model.Product
 import br.com.ramires.gourment.coffemanagement.data.repository.product.ProductRepositoryInterface
 import br.com.ramires.gourment.coffemanagement.databinding.FragmentProductsBinding
-import br.com.ramires.gourment.coffemanagement.ui.order.OrderViewModel
-import br.com.ramires.gourment.coffemanagement.ui.order.OrderViewModelFactory
 
 class ProductsFragment(private val repository: ProductRepositoryInterface) : Fragment() {
 

@@ -4,9 +4,7 @@ import android.content.Context
 import android.provider.Settings
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import br.com.ramires.gourment.coffemanagement.data.repository.device.DeviceRepositoryInterface
-import kotlinx.coroutines.launch
 
 class DeviceViewModel(
     private val repository: DeviceRepositoryInterface

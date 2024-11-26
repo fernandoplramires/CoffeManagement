@@ -7,6 +7,7 @@ import br.com.ramires.gourment.coffemanagement.data.repository.order.OrderReposi
 class OrderViewModelFactory(
     private val repository: OrderRepositoryInterface
 ) : ViewModelProvider.Factory {
+
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(OrderViewModel::class.java)) {

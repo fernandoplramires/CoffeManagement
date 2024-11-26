@@ -19,7 +19,6 @@ import com.google.android.material.tabs.TabLayout
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
     private var productRepository: ProductRepositoryInterface? = null
     private var orderRepository: OrderRepositoryInterface? = null
 

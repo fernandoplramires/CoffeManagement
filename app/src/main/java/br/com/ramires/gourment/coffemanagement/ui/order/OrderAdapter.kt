@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -17,8 +16,6 @@ import br.com.ramires.gourment.coffemanagement.data.model.Order
 import br.com.ramires.gourment.coffemanagement.data.model.OrderStatus
 import br.com.ramires.gourment.coffemanagement.databinding.ItemOrderBinding
 import br.com.ramires.gourment.coffemanagement.util.Convertions
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class OrderAdapter(
     private val onOrderClick: (Int) -> Unit,

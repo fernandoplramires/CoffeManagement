@@ -46,7 +46,7 @@ class FirebaseDeviceRepository : DeviceRepositoryInterface {
 
             !userSnapshot.isEmpty
         } catch (e: Exception) {
-            Log.e("FirebaseDeviceRepository", "Erro to validade username/password", e)
+            Log.e("FirebaseDeviceRepository", "Error to validade username/password", e)
             false
         }
     }
