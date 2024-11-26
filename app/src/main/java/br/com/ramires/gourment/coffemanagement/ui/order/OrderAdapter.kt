@@ -114,7 +114,7 @@ class OrderAdapter(
             val statusAdapter = ArrayAdapter(
                 root.context,
                 android.R.layout.simple_spinner_item,
-                OrderStatus.values().map { it.name }
+                OrderStatus.values().filter { it.name != "CARRINHO" }.map { it.name }
             )
             statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerOrderStatus.adapter = statusAdapter

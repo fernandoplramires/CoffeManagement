@@ -21,7 +21,8 @@ class OrderViewModel(private val repository: OrderRepositoryInterface) : ViewMod
     private fun loadOrders() {
         viewModelScope.launch {
             try {
-                val orderList = repository.getAllOrders()
+                //val orderList = repository.getAllOrders()
+                val orderList = repository.getAllOrdersForManagement()
                 //Log.d("FirebaseTest", "Load orders: ${orderList.toString()}")
                 _orders.postValue(orderList)
             } catch (e: Exception) {

@@ -30,6 +30,26 @@ class FirebaseOrderRepository : OrderRepositoryInterface {
         }
     }
 
+    override suspend fun getAllOrdersForManagement(): List<Order> {
+        return try {
+            val snapshot = ordersCollection.whereNotEqualTo("status","CARRINHO").get().await()
+            snapshot.documents.mapNotNull { it.toObject(Order::class.java) }
+        } catch (e: Exception) {
+            Log.e("FirebaseOrderRepository", "Error fetching orders", e)
+            emptyList()
+        }
+    }
+
+    override suspend fun getAllOrdersByDeviceId(deviceId: String): List<Order> {
+        return try {
+            val snapshot = ordersCollection.whereEqualTo("deviceId", deviceId).get().await()
+            snapshot.documents.mapNotNull { it.toObject(Order::class.java) }
+        } catch (e: Exception) {
+            Log.e("FirebaseOrderRepository", "Error fetching orders", e)
+            emptyList()
+        }
+    }
+
     override suspend fun getNextProductId(): Int {
         val metadataRef = db.collection("metadata").document("productsMaxId")
         return db.runTransaction { transaction ->

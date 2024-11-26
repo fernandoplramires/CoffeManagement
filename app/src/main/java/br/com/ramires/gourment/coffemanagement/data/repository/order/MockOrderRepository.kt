@@ -10,6 +10,7 @@ class MockOrderRepository : OrderRepositoryInterface {
     private val orders = mutableListOf<Order>(
         Order(
             391,
+            "946fcb4057657c1a",
             listOf(
                 OrderDetail(
                     "Cookie Cake Red Velvet Oreo 300g",
@@ -34,6 +35,7 @@ class MockOrderRepository : OrderRepositoryInterface {
         ),
         Order(
             2,
+            "0000000000000",
             listOf(
                 OrderDetail(
                 "Cookie Cake Red Velvet Oreo 300g",
@@ -47,11 +49,36 @@ class MockOrderRepository : OrderRepositoryInterface {
             "Casa",
             "20",
             OrderStatus.PREPARACAO.toString()
+        ),
+        Order(
+            3,
+            "0000000000000",
+            listOf(
+                OrderDetail(
+                    "Cookie Cake Red Velvet Oreo 300g",
+                    1
+                )
+            ),
+            25.0,
+            "hermes@uol.com",
+            "(11) 98877-1255",
+            "06010-101",
+            "Casa",
+            "20",
+            OrderStatus.CARRINHO.toString()
         )
     )
 
     override suspend fun getAllOrders(): List<Order> {
         return orders
+    }
+
+    override suspend fun getAllOrdersForManagement(): List<Order> {
+        return orders.filter { it.status != "CARRINHO" }
+    }
+
+    override suspend fun getAllOrdersByDeviceId(deviceId: String): List<Order> {
+        return orders.filter { it.deviceId == deviceId }
     }
 
     override suspend fun getNextProductId(): Int {
