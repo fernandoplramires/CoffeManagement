@@ -67,7 +67,7 @@ class ProductViewModel(private val repository: ProductRepositoryInterface) : Vie
         viewModelScope.launch {
             try {
                 repository.updateProduct(product)
-                _products.value = repository.getAllProducts() // Atualiza o LiveData após salvar
+                _products.value = repository.getAllProducts().toList() // Atualiza o LiveData após salvar
             } catch (e: Exception) {
                 // Trate exceções, se necessário
                 e.printStackTrace()

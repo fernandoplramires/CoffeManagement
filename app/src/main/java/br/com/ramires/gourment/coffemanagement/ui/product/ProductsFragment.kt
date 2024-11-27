@@ -20,7 +20,8 @@ class ProductsFragment(private val repository: ProductRepositoryInterface) : Fra
     private lateinit var adapter: ProductAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
@@ -53,20 +54,13 @@ class ProductsFragment(private val repository: ProductRepositoryInterface) : Fra
     }
 
     private fun setupRecyclerView() {
-        adapter = ProductAdapter(
-            onEditClick = { product ->
-                // Inicia a edição do produto
-                viewModel.startEditingProduct(product)
-            },
-            onRemoveClick = { product ->
-                // Remove o produto
-                showRemoveConfirmationDialog(product)
-            },
-            onSaveClick = { updatedProduct ->
-                // Salva o produto editado
-                viewModel.saveEditedProduct(updatedProduct)
+        adapter = ProductAdapter { action, product ->
+            when (action) {
+                ProductAdapter.ActionType.EDIT -> viewModel.startEditingProduct(product)
+                ProductAdapter.ActionType.REMOVE -> showRemoveConfirmationDialog(product)
+                ProductAdapter.ActionType.SAVE -> viewModel.saveEditedProduct(product)
             }
-        )
+        }
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
     }
@@ -101,7 +95,7 @@ class ProductsFragment(private val repository: ProductRepositoryInterface) : Fra
         _binding = null
     }
 
-    companion object {
-        val REQUEST_IMAGE_PICK: Int = 1001
-    }
+    //companion object {
+    //    val REQUEST_IMAGE_PICK: Int = 1001
+    //}
 }

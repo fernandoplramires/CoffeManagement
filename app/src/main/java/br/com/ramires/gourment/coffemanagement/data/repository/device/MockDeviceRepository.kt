@@ -18,6 +18,13 @@ class MockDeviceRepository : DeviceRepositoryInterface {
             "hermes",
             "1234",
             false
+        ),
+        Device(
+            2,
+            "946fcb4057657c1a",
+            "emulador",
+            "1234",
+            true
         )
     )
 
