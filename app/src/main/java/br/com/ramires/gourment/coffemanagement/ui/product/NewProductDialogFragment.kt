@@ -1,18 +1,33 @@
 package br.com.ramires.gourment.coffemanagement.ui.product
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import br.com.ramires.gourment.coffemanagement.databinding.DialogNewProductBinding
 
-class NewProductDialogFragment(private val onSave: (String, String, String, String) -> Unit) : DialogFragment() {
+class NewProductDialogFragment(private val onSaveProduct: (Double, String, String, String?) -> Unit) : DialogFragment() {
 
     private var _binding: DialogNewProductBinding? = null
     private val binding get() = _binding!!
+    private var selectedImageUri: Uri? = null
+
+    // Activity Result Launcher para selecionar imagem da galeria
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            selectedImageUri = uri
+            binding.imageViewProductPreview.setImageURI(uri)
+        } else {
+            Toast.makeText(requireContext(), "Falha ao carregar imagem", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,18 +54,29 @@ class NewProductDialogFragment(private val onSave: (String, String, String, Stri
             dismiss()
         }
 
+        // Botao de upload de imagem
+        binding.buttonUploadImage.setOnClickListener {
+            selectImageFromGallery()
+        }
+
         // Botão de salvar produto
         binding.buttonSaveProduct.setOnClickListener {
-            val value = binding.editTextValue.text.toString()
+            val value = binding.editTextValue.text.toString().toDoubleOrNull()
             val title = binding.editTextTitle.text.toString()
             val description = binding.editTextDescription.text.toString()
-            val imageUrl = "" // Caminho padrão ou obtido via upload
 
-            // Passa os dados para o callback e fecha o dialog
-            onSave(value, title, description, imageUrl)
-            Toast.makeText(requireContext(), "Produto salvo com sucesso!", Toast.LENGTH_SHORT).show()
-            dismiss()
+            if (value != null && title.isNotEmpty() && description.isNotEmpty()) {
+                onSaveProduct(value, title, description, selectedImageUri?.toString())
+                Toast.makeText(requireContext(), "Produto salvo com sucesso!", Toast.LENGTH_SHORT).show()
+                dismiss()
+            } else {
+                Toast.makeText(requireContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    private fun selectImageFromGallery() {
+        imagePickerLauncher.launch("image/*")
     }
 
     private fun validateForm() {

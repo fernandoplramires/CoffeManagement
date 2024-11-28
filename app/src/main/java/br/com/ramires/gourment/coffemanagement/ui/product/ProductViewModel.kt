@@ -2,6 +2,7 @@ package br.com.ramires.gourment.coffemanagement.ui.product
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,10 +34,17 @@ class ProductViewModel(private val repository: ProductRepositoryInterface) : Vie
         }
     }
 
-    fun addProduct(product: Product) {
+    fun addProduct(context: Context, product: Product) {
         viewModelScope.launch {
             try {
-                repository.addProduct(product)
+                if (product.imageUrl != null) {
+                    val imageUri = product.imageUrl.toUri()
+                    val base64Image = ImageUtils.convertImageToBase64(context, imageUri)
+                    val updatedProduct = product.copy(imageUrl = base64Image)
+                    repository.addProduct(updatedProduct)
+                } else {
+                    repository.addProduct(product)
+                }
                 _products.value = repository.getAllProducts().toList()
             } catch (e: Exception) {
                 e.printStackTrace()

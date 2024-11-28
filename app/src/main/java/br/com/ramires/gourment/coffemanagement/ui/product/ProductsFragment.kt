@@ -60,10 +60,10 @@ class ProductsFragment(private val repository: ProductRepositoryInterface) : Fra
                     id = 0,
                     name = title,
                     description = description,
-                    price = value.toDoubleOrNull() ?: 0.0,
+                    price = value ?: 0.0,
                     imageUrl = imageUrl
                 )
-                viewModel.addProduct(newProduct)
+                viewModel.addProduct(requireContext(), newProduct)
             }
             dialog.show(parentFragmentManager, "NewProductDialogFragment")
         }
