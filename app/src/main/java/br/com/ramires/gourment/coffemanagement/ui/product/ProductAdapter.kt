@@ -1,7 +1,5 @@
 package br.com.ramires.gourment.coffemanagement.ui.product
 
-import android.app.Activity
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,17 +9,17 @@ import br.com.ramires.gourment.coffemanagement.R
 import br.com.ramires.gourment.coffemanagement.data.model.Product
 import br.com.ramires.gourment.coffemanagement.databinding.ItemProductBinding
 import br.com.ramires.gourment.coffemanagement.util.Convertions
+import br.com.ramires.gourment.coffemanagement.util.ImageCache
 import com.bumptech.glide.Glide
 
-class ProductAdapter(
-    private val onAction: (ActionType, Product) -> Unit
-) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter(private val onAction: (ActionType, Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     enum class ActionType {
-        EDIT, REMOVE, SAVE
+        EDIT, REMOVE, SAVE, UPLOAD_IMAGE
     }
 
     private val productList = mutableListOf<Product>()
+    private val imageCache = ImageCache()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -42,16 +40,12 @@ class ProductAdapter(
         notifyDataSetChanged()
     }
 
-    fun updateImageForProduct(position: Int, imageUri: String) {
-        val product = productList[position]
-        val updatedProduct = product.copy(imageUrl = imageUri)
-        productList[position] = updatedProduct
-        notifyItemChanged(position)
+    fun getPositionById(id: Int): Int {
+        return productList.indexOfFirst { it.id == id }
     }
 
-    inner class ProductViewHolder(
-        private val binding: ItemProductBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    inner class ProductViewHolder(private val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(product: Product) {
             // Preenche os dados do produto
             binding.textViewName.text = product.name
@@ -61,42 +55,47 @@ class ProductAdapter(
             binding.editTextDescription.setText(product.description)
             binding.editTextPrice.setText(product.price.toString())
 
+            // Carregar imagem (usando cache)
+            val imageUri = product.imageUrl?.let { imageCache.getCachedImage(binding.root.context, it) }
+            if (imageUri != null) {
+                //Imagem obtida do cache
+                Glide.with(binding.root.context).load(imageUri).into(binding.imageViewProduct)
+            } else {
+                // Imagem padrão
+                binding.imageViewProduct.setImageResource(R.drawable.ic_placeholder)
+            }
+
             // Altera a borda do contêiner baseado no estado
             binding.productContainer.setBackgroundResource(R.drawable.item_shadow_border)
 
-            // Carregar imagem
-            if (product.imageUrl.isNullOrEmpty()) {
-                binding.imageViewProduct.setImageResource(R.drawable.ic_placeholder)
-            } else {
-                Glide.with(binding.root.context)
-                    .load(product.imageUrl)
-                    .into(binding.imageViewProduct)
-            }
-
-            // Configuração de eventos
+            // Configuração de eventos (editar)
             binding.buttonEdit.setOnClickListener {
                 toggleEditing(enabled = true)
                 onAction(ActionType.EDIT, product)
             }
+
+            // Configuração de eventos (salvar)
             binding.buttonSave.setOnClickListener {
                 toggleEditing(enabled = false)
                 val updatedProduct = product.copy(
                     name = binding.editTextName.text.toString(),
                     description = binding.editTextDescription.text.toString(),
                     price = binding.editTextPrice.text.toString().toDoubleOrNull() ?: product.price,
-                    imageUrl = product.imageUrl // Atualiza o URI da imagem, se necessário
+                    imageUrl = product.imageUrl
                 )
                 onAction(ActionType.SAVE, updatedProduct)
                 Toast.makeText(binding.root.context, "Produto atualizado com sucesso!", Toast.LENGTH_SHORT).show()
             }
+
+            // Configuração de eventos (remover)
             binding.buttonRemove.setOnClickListener {
                 onAction(ActionType.REMOVE, product)
             }
-            /*
+
+            // Configuração de eventos (imagem)
             binding.buttonUploadImage.setOnClickListener {
-                selectImageFromGallery()
+                onAction(ActionType.UPLOAD_IMAGE, product)
             }
-            */
         }
 
         private fun toggleEditing(enabled: Boolean) {
@@ -118,12 +117,7 @@ class ProductAdapter(
             val borderDrawable = if (enabled) R.drawable.item_shadow_border_red else R.drawable.item_shadow_border
             binding.productContainer.setBackgroundResource(borderDrawable)
         }
-
-        //private fun selectImageFromGallery() {
-        //    val intent = Intent(Intent.ACTION_PICK)
-        //    intent.type = "image/*"
-        //    (binding.root.context as? Activity)?.startActivityForResult(intent, ProductsFragment.REQUEST_IMAGE_PICK)
-        //}
     }
 }
+
 

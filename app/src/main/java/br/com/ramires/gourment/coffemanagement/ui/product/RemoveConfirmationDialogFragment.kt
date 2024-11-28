@@ -6,9 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import br.com.ramires.gourment.coffemanagement.R
 
-class RemoveConfirmationDialogFragment(
-    private val onConfirm: (Boolean) -> Unit
-) : DialogFragment() {
+class RemoveConfirmationDialogFragment(private val onConfirm: (Boolean) -> Unit) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -25,4 +23,3 @@ class RemoveConfirmationDialogFragment(
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 }
-

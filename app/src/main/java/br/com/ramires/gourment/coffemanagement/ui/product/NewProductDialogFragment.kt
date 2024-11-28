@@ -44,7 +44,7 @@ class NewProductDialogFragment(private val onSave: (String, String, String, Stri
             val value = binding.editTextValue.text.toString()
             val title = binding.editTextTitle.text.toString()
             val description = binding.editTextDescription.text.toString()
-            val imageUrl = "https://via.placeholder.com/150" // Caminho padrão ou obtido via upload
+            val imageUrl = "" // Caminho padrão ou obtido via upload
 
             // Passa os dados para o callback e fecha o dialog
             onSave(value, title, description, imageUrl)

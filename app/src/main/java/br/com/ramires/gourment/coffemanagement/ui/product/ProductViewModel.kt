@@ -1,11 +1,14 @@
 package br.com.ramires.gourment.coffemanagement.ui.product
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.ramires.gourment.coffemanagement.data.model.Product
 import br.com.ramires.gourment.coffemanagement.data.repository.product.ProductRepositoryInterface
+import br.com.ramires.gourment.coffemanagement.util.ImageUtils
 import kotlinx.coroutines.launch
 
 class ProductViewModel(private val repository: ProductRepositoryInterface) : ViewModel() {
@@ -13,11 +16,7 @@ class ProductViewModel(private val repository: ProductRepositoryInterface) : Vie
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> get() = _products
 
-    private val _editingProduct = MutableLiveData<Product?>()
-    val editingProduct: LiveData<Product?> get() = _editingProduct
-
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> get() = _errorMessage
+    var editingProduct: Product? = null
 
     init {
         loadProducts()
@@ -29,7 +28,6 @@ class ProductViewModel(private val repository: ProductRepositoryInterface) : Vie
                 val orderList = repository.getAllProducts()
                 _products.postValue(orderList)
             } catch (e: Exception) {
-                // Trate exceções, se necessário
                 e.printStackTrace()
             }
         }
@@ -39,9 +37,8 @@ class ProductViewModel(private val repository: ProductRepositoryInterface) : Vie
         viewModelScope.launch {
             try {
                 repository.addProduct(product)
-                loadProducts()
+                _products.value = repository.getAllProducts().toList()
             } catch (e: Exception) {
-                // Trate exceções, se necessário
                 e.printStackTrace()
             }
         }
@@ -51,25 +48,36 @@ class ProductViewModel(private val repository: ProductRepositoryInterface) : Vie
         viewModelScope.launch {
             try {
                 repository.deleteProduct(productId)
-                _products.value = repository.getAllProducts().toList() // Garante nova referência
+                _products.value = repository.getAllProducts().toList()
             } catch (e: Exception) {
-                // Trate exceções, se necessário
                 e.printStackTrace()
             }
         }
     }
 
     fun startEditingProduct(product: Product) {
-        _editingProduct.value = product
+        editingProduct = product
     }
 
     fun saveEditedProduct(product: Product) {
         viewModelScope.launch {
             try {
                 repository.updateProduct(product)
-                _products.value = repository.getAllProducts().toList() // Atualiza o LiveData após salvar
+                _products.value = repository.getAllProducts().toList()
             } catch (e: Exception) {
-                // Trate exceções, se necessário
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun updateProductImage(context: Context, product: Product, imageUri: Uri) {
+        viewModelScope.launch {
+            try {
+                val base64Image = ImageUtils.convertImageToBase64(context, imageUri)
+                val updatedProduct = product.copy(imageUrl = base64Image)
+                repository.updateProduct(updatedProduct)
+                _products.value = repository.getAllProducts().toList()
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
