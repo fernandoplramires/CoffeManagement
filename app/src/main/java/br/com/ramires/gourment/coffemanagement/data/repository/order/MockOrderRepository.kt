@@ -9,23 +9,23 @@ class MockOrderRepository : OrderRepositoryInterface {
     private var currentMaxId = 0
     private val orders = mutableListOf<Order>(
         Order(
-            391,
+            1,
             "946fcb4057657c1a",
             listOf(
                 OrderDetail(
+                    1,
                     "Cookie Cake Red Velvet Oreo 300g",
+                    35.5,
                     1
                 ),
                 OrderDetail(
-                    "Cookie Cake Nutella 300g",
-                    2
-                ),
-                OrderDetail(
+                    2,
                     "Cupcake Buenasso 300g",
+                    20.0,
                     2
                 )
             ),
-            145.0,
+            55.5,
             "joselito@uol.com",
             "(11) 98877-6655",
             "06010-100",
@@ -38,11 +38,13 @@ class MockOrderRepository : OrderRepositoryInterface {
             "0000000000000",
             listOf(
                 OrderDetail(
-                "Cookie Cake Red Velvet Oreo 300g",
-                2
+                    1,
+                    "Cookie Cake Red Velvet Oreo 300g",
+                    35.5,
+                    2
                 )
             ),
-            75.0,
+            71.0,
             "hermes@uol.com",
             "(11) 98877-1255",
             "06010-101",
@@ -55,11 +57,13 @@ class MockOrderRepository : OrderRepositoryInterface {
             "0000000000000",
             listOf(
                 OrderDetail(
+                    1,
                     "Cookie Cake Red Velvet Oreo 300g",
+                    35.5,
                     1
                 )
             ),
-            25.0,
+            35.5,
             "hermes@uol.com",
             "(11) 98877-1255",
             "06010-101",

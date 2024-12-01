@@ -11,9 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import br.com.ramires.gourment.coffemanagement.R
 
-class UserLoginDialogFragment(
-    private val onLoginAttempt: (username: String, password: String) -> Unit
-) : DialogFragment() {
+class UserLoginDialogFragment(private val onLoginAttempt: (username: String, password: String) -> Unit) : DialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +48,7 @@ class UserLoginDialogFragment(
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setCancelable(false) // Torna o diálogo não cancelável
+        dialog.setCancelable(false)
         return dialog
     }
 }

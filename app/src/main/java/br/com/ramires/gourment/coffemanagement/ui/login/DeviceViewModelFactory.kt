@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import br.com.ramires.gourment.coffemanagement.data.repository.device.DeviceRepositoryInterface
 
-class DeviceViewModelFactory(
-    private val repository: DeviceRepositoryInterface
-) : ViewModelProvider.Factory {
+class DeviceViewModelFactory(private val repository: DeviceRepositoryInterface) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

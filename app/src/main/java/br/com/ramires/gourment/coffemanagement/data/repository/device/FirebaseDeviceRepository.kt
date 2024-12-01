@@ -89,4 +89,3 @@ class FirebaseDeviceRepository : DeviceRepositoryInterface {
         }
     }
 }
-

@@ -54,7 +54,7 @@ class OrdersFragment(private val repository: OrderRepositoryInterface) : Fragmen
     private fun observeViewModel() {
         viewModel.orders.observe(viewLifecycleOwner) { orders ->
             adapter.submitList(orders)
-            adapter.notifyDataSetChanged() // Força a atualização do RecyclerView
+            adapter.notifyDataSetChanged()
         }
     }
 

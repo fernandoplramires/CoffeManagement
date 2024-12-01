@@ -21,12 +21,10 @@ class OrderViewModel(private val repository: OrderRepositoryInterface) : ViewMod
     private fun loadOrders() {
         viewModelScope.launch {
             try {
-                //val orderList = repository.getAllOrders()
                 val orderList = repository.getAllOrdersForManagement()
-                //Log.d("FirebaseTest", "Load orders: ${orderList.toString()}")
+                Log.d("OrderViewModel", "Load orders: ${orderList.toString()}")
                 _orders.postValue(orderList)
             } catch (e: Exception) {
-                // Trate exceções, se necessário
                 e.printStackTrace()
             }
         }
@@ -35,11 +33,10 @@ class OrderViewModel(private val repository: OrderRepositoryInterface) : ViewMod
     fun updateOrder(updatedOrder: Order) {
         viewModelScope.launch {
             try {
-                //Log.d("FirebaseTest", "Updating order: ${updatedOrder.toString()}")
+                Log.d("OrderViewModel", "Updating order: ${updatedOrder.toString()}")
                 repository.updateOrder(updatedOrder)
                 loadOrders()
             } catch (e: Exception) {
-                // Trate exceções, se necessário
                 e.printStackTrace()
             }
         }

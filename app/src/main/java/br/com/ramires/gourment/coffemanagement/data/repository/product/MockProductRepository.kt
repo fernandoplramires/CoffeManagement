@@ -4,7 +4,7 @@ import br.com.ramires.gourment.coffemanagement.data.model.Product
 
 class MockProductRepository : ProductRepositoryInterface {
 
-    private var currentMaxId = 0
+    private var currentMaxId = 2
     private val products = mutableListOf(
         Product(
             1,

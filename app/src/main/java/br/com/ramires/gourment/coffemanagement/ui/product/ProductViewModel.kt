@@ -16,7 +16,6 @@ class ProductViewModel(private val repository: ProductRepositoryInterface) : Vie
 
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> get() = _products
-
     var editingProduct: Product? = null
 
     init {

@@ -96,6 +96,11 @@ class OrderAdapter(
                     notifyDataSetChanged()
                 }
 
+                // Desabilita os botoes para itens que nao estao no carrinho
+                buttonIncrease.visibility = View.GONE
+                buttonDecrease.visibility = View.GONE
+                buttonRemove.visibility = View.GONE
+
                 layoutOrderItems.addView(itemLayout)
             }
 

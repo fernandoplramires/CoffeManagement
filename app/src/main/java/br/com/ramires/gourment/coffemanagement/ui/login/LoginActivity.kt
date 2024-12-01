@@ -2,7 +2,6 @@ package br.com.ramires.gourment.coffemanagement.ui.login
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -60,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val isRegistered = deviceViewModel.isDeviceRegistered(deviceId)
             if (isRegistered) {
-                // IMEI válido, prosseguir para MainActivity
+                // Device IO válido, prosseguir para MainActivity
                 MainActivity.start(this@LoginActivity, repositoryType)
             } else {
                 // Abrir login de usuário e senha
@@ -81,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
                         "Acesso negado: Usuário/senha/permissao inválidos.",
                         Toast.LENGTH_LONG
                     ).show()
-                    finish() // Fecha o app
+                    finish()
                 }
             }
         }

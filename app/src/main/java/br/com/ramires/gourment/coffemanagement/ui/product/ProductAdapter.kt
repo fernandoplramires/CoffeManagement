@@ -119,5 +119,3 @@ class ProductAdapter(private val onAction: (ActionType, Product) -> Unit) : Recy
         }
     }
 }
-
-
